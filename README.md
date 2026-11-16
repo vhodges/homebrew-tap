@@ -6,9 +6,12 @@ local-first, Git-backed project management and documentation.
 ## Install
 
 ```sh
-brew tap vhodges/tap
+brew tap --trust vhodges/tap
 brew install --cask vhodges/tap/manyhands
 ```
+
+Homebrew has to trust a third-party tap before it will audit its casks, so tap
+it with `--trust` first. Read the cask before you do; it is a single short file.
 
 This installs `Manyhands.app` into your applications directory and links the
 `manyhands-cli` command onto your `PATH`.
@@ -50,6 +53,7 @@ draft-only downloads.
 4. On an Apple Silicon Mac, with `TAP=vhodges/tap`:
 
    ```sh
+   brew tap --trust "$TAP"
    brew style --cask Casks/m/manyhands.rb
    brew audit --cask --online "$TAP/manyhands"
    brew install --cask "$TAP/manyhands"
