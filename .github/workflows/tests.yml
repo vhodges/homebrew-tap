@@ -1,0 +1,40 @@
+name: Tap checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tap-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tap-syntax:
+    name: Style and audit casks
+    # Apple Silicon, matching the arm64-only cask.
+    runs-on: macos-15
+    steps:
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check out the tap
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Clean up the runner
+        run: brew test-bot --only-cleanup-before
+
+      - name: Set up test-bot
+        run: brew test-bot --only-setup
+
+      # Runs `brew style` and `brew audit` over every cask in the tap.
+      - name: Check tap syntax
+        run: brew test-bot --only-tap-syntax
