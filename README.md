@@ -20,9 +20,9 @@ This installs `Manyhands.app` into your applications directory and links the
 
 - **Apple Silicon only.** The cask has no Intel build.
 - **Not notarized.** Builds are ad-hoc signed, not Developer ID signed or
-  notarized, so macOS may refuse to open the app the first time. Use macOS's
-  normal approval flow (System Settings, Privacy & Security) if you trust it.
-  The cask does not remove quarantine attributes.
+  notarized, and the cask does not remove quarantine attributes. macOS blocks
+  the app and the CLI until you approve them. See
+  [First run](#first-run-macos-approval) below.
 - **Keep the CLI where Homebrew puts it.** `manyhands-cli` is a symlink into the
   Caskroom, next to the libraries and licence notices it loads. Don't copy the
   executable elsewhere on its own.
@@ -31,6 +31,26 @@ This installs `Manyhands.app` into your applications directory and links the
 
 Other platforms (Linux, Windows) are served by archives and installers on the
 [Manyhands releases page](https://github.com/vhodges/manyhands/releases).
+
+## First run: macOS approval
+
+Because the build is not notarized, macOS quarantines everything the cask
+installs and refuses to run it. Only do this if you trust the build.
+
+- **The CLI needs every file approved, not only `manyhands-cli`.** It loads
+  `libssl.3.dylib` and `libcrypto.3.dylib` from `lib/` beside `bin/` in the
+  Caskroom, and loading a quarantined library fails with "Library load
+  disallowed by system policy". Clear the whole install tree:
+
+  ```sh
+  xattr -dr com.apple.quarantine \
+    "$(dirname "$(dirname "$(readlink -f "$(which manyhands-cli)")")")"
+  ```
+
+- **The app.** Open it once, then allow it under System Settings, Privacy &
+  Security, "Open Anyway". On current macOS this needs an administrator.
+
+Repeat after each upgrade; a new version is a new quarantined download.
 
 ## Layout
 
