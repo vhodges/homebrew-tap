@@ -1,11 +1,16 @@
 cask "manyhands" do
-  version "0.2.0-rc.1"
-  sha256 "f6154e498daada3ca2bbb08e39306c55de3308891a472334e7eb2bd4b54a601a"
+  version "0.2.0"
+  sha256 "f2472c27fa8557633015e5d98bf60b9656e8f25210ce209979ae7141db2dafaf"
 
   url "https://github.com/vhodges/manyhands/releases/download/v#{version}/manyhands-v#{version}-aarch64-apple-darwin.zip"
   name "Manyhands"
   desc "Local-first, Git-backed project management and documentation"
   homepage "https://github.com/vhodges/manyhands"
+
+  livecheck do
+    url :url
+    strategy :github_latest
+  end
 
   depends_on arch: :arm64
   depends_on macos: :sequoia
@@ -15,8 +20,17 @@ cask "manyhands" do
 
   caveats <<~EOS
     This personal-tap build is ad-hoc signed, not Developer ID signed or notarized.
-    macOS may block opening it; use macOS's normal approval flow if you trust it.
-    The CLI's libraries and disclosures remain in the Caskroom beside bin/.
+    macOS quarantines it and blocks it until you approve it. Only do this if you
+    trust the build.
+
+    The CLI loads libraries from lib/ beside bin/, and each file needs approval
+    too, or it fails with "Library load disallowed by system policy". Clear the
+    whole install in one step:
+      xattr -dr com.apple.quarantine "#{staged_path}"
+
+    The app: open it once, then choose "Open Anyway" under System Settings,
+    Privacy & Security. This needs an administrator.
+
     Do not move the CLI out of that layout. Uninstall preserves your user data.
   EOS
 end
