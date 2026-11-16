@@ -19,15 +19,11 @@ jobs:
     # Apple Silicon, matching the arm64-only cask.
     runs-on: macos-15
     steps:
+      # Also taps this repository, so no separate checkout step.
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check out the tap
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
       - name: Clean up the runner
         run: brew test-bot --only-cleanup-before
