@@ -1,6 +1,6 @@
 cask "manyhands" do
-  version "0.2.0"
-  sha256 "f2472c27fa8557633015e5d98bf60b9656e8f25210ce209979ae7141db2dafaf"
+  version "0.2.1"
+  sha256 "4e9afaf1ebd8a8b625bbcfe102bcde7b6e8af956a40f31375b56d9a38e5be231"
 
   url "https://github.com/vhodges/manyhands/releases/download/v#{version}/manyhands-v#{version}-aarch64-apple-darwin.zip"
   name "Manyhands"
